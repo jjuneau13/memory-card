@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Card from "./components/Card.jsx";
+import Card from "./components/card.jsx";
 
 function App() {
   const [score, setScore] = useState(0);
@@ -30,17 +30,18 @@ function App() {
   }, [pokemon]);
 
   function handleClick(name) {
-    console.log(name);
-    if (clicked.find(name)) {
+    console.log(name, clicked);
+    if (clicked.includes(name)) {
       setScore(0);
       setClicked([]);
     } else {
       setScore(score + 1);
-      setClicked([...clicked].push(name));
+      setClicked([...clicked, name]);
+      if (score >= highScore) {
+        setHighScore(highScore + 1);
+      }
     }
-    if (score > highScore) {
-      setHighScore(score);
-    }
+
     setPokemon([...pokemon].sort(() => Math.random() - 0.5));
   }
 
@@ -55,7 +56,7 @@ function App() {
             key={char}
             name={char}
             url={sprites[char]}
-            callbackFunc={() => handleClick(char)}
+            onClick={() => handleClick(char)}
           />
         ))}
     </main>
