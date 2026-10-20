@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
 import Card from "./components/card.jsx";
+import "./App.css";
 
-function App() {
-  const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(0);
-  const [sprites, setSprites] = useState(null);
-  const [clicked, setClicked] = useState([]);
-  const [pokemon, setPokemon] = useState([
+function randomizePokemon() {
+  return [
     "ditto",
     "pikachu",
     "raichu",
@@ -17,7 +14,17 @@ function App() {
     "chimchar",
     "venusaur",
     "zapdos",
-  ]);
+    "charmander",
+    "squirtle",
+  ].sort(() => Math.random() - 0.5);
+}
+
+function App() {
+  const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
+  const [sprites, setSprites] = useState(null);
+  const [clicked, setClicked] = useState([]);
+  const [pokemon, setPokemon] = useState(randomizePokemon());
 
   useEffect(() => {
     Promise.all(
@@ -30,7 +37,6 @@ function App() {
   }, [pokemon]);
 
   function handleClick(name) {
-    console.log(name, clicked);
     if (clicked.includes(name)) {
       setScore(0);
       setClicked([]);
@@ -41,24 +47,30 @@ function App() {
         setHighScore(highScore + 1);
       }
     }
-
-    setPokemon([...pokemon].sort(() => Math.random() - 0.5));
+    setPokemon(randomizePokemon());
   }
 
   return (
     <main>
-      <h1>Memory Game</h1>
-      <p>Score: {score}</p>
-      <p>High Score: {highScore}</p>
-      {sprites &&
-        pokemon.map((char) => (
-          <Card
-            key={char}
-            name={char}
-            url={sprites[char]}
-            onClick={() => handleClick(char)}
-          />
-        ))}
+      <header>
+        <h1>Memory Game</h1>
+        <div className="score">
+          <p>Score: {score}</p>
+          <p>High Score: {highScore}</p>
+        </div>
+      </header>
+
+      <div className="card-div">
+        {sprites &&
+          pokemon.map((char) => (
+            <Card
+              key={char}
+              name={char}
+              url={sprites[char]}
+              onClick={() => handleClick(char)}
+            />
+          ))}
+      </div>
     </main>
   );
 }

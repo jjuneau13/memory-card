@@ -1,6 +1,6 @@
 export default function Card({ name, url, onClick }) {
   return (
-    <div className={name} onClick={onClick}>
+    <div className="card" onClick={onClick}>
       <img src={url} alt={name} />
       <p>{name}</p>
     </div>
